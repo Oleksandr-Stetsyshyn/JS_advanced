@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        Сумма на рахунку:{{sum}} <br>
+        Зарахувати на рахунок: <input type="number" v-model="addMoneyInput">
+        <button @click="addMoney" :disabled="isButtonAddDisabled">Зарахувати</button><br>
+        Зняти з рахунку: <input type="number" v-model="getMoneyInput">
+        <button @click="getMoney" :disabled="isButtonGetDisabled">Зняти</button><br>
+        Відсотки за обслуговування: {{percent}}
+        <hr>
+        <div>Сумма у долларах: ${{usd}} </div>
+        <div>Сумма у эвро: €{{eur}}</div>
+    </div>
+
+    <script>
+        var app = new Vue({
+
+            el: '#app',
+            data: {
+                sum: '0',
+                addMoneyInput: '0',
+                getMoneyInput: '0',
+                percent: '0',
+                eur: '',
+                usd: ''
+            },
+
+            watch: {
+                sum(newVal) {
+                    if (newVal) {
+                        this.usd = (this.sum / 24).toFixed(2)
+                        this.eur = (this.sum / 27).toFixed(2)
+                    }
+                },
+
+                addMoneyInput(newVal) {
+                    if (newVal)
+                        this.percent = (this.addMoneyInput * 0.03).toFixed(2)
+                },
+                getMoneyInput(newVal) {
+                    if (newVal)
+                        this.percent = (this.getMoneyInput * 0.03).toFixed(2)
+                }
+            },
+
+            computed: {
+                isButtonAddDisabled() {
+                    return !(this.addMoneyInput > 0)
+                },
+                isButtonGetDisabled() {
+                    return !((this.sum - this.getMoneyInput - this.percent) > 0 && this.getMoneyInput > 0)
+                }
+            },
+
+            methods: {
+                addMoney() {
+                    this.sum = parseInt(this.sum) + parseInt(this.addMoneyInput) - this.percent
+                    this.addMoneyInput = '0'
+                },
+
+                getMoney() {
+                    this.sum = parseInt(this.sum) - parseInt(this.getMoneyInput) - this.percent
+                    this.getMoneyInput = '0'
+                }
+            }
+        });
+
+
+
+
+
+    </script>
+</body>
+
+</html>
