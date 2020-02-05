@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="number" v-model='val1'>
+        <input type="number" v-model='val2'>
+        <input type="number" v-model='val3'>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                base: 1
+            },
+            computed: {
+                val1: {
+                    get: function () {
+                        return this.base
+                    },
+                    set: function (newVal) {
+                        return this.base = parseInt(newVal)
+                    }
+                },
+                val2: {
+                    get: function () {
+                        return this.base+1
+                    },
+                    set: function (newVal) {
+                        return this.base = parseInt(newVal)-1
+                    }
+                },
+                val3: {
+                    get: function () {
+                        return this.base+2
+                    },
+                    set: function (newVal) {
+                        return this.base = parseInt(newVal)-2
+                    }
+                }
+
+
+            },
+            watch: {},
+            methods: {}
+        })
+    </script>
+</body>
+
+</html>

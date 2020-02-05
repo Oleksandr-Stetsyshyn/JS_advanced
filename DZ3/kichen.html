@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <label>Нова замовлена страва:
+            <input type="text" v-model="newDish" /></label>
+        <button @click='addNewDish'>Додати</button>
+        <h5>Очікують на виконання</h5>
+        <hr>
+        <ul>
+            <li v-for="(dish,index) in dishList" :key="index">
+                {{dish}}
+                <button @click='cooking(index)'>Готувати</button>
+            </li>
+        </ul>
+        <h5>Виконуються</h5>
+
+        <hr>
+        <ul>
+            <li v-for="(dish,index) in cookingList" :key="index">
+                {{dish}}
+                <button @click='ready(index)'>Приготовлено</button>
+            </li>
+        </ul>
+        <h5>Готові до виносу</h5>
+
+        <hr>
+
+        <ul>
+            <li v-for="(dish,index) in doneList" :key="index">
+                {{dish}}
+                <button @click='done(index)'>Подано</button>
+            </li>
+        </ul>
+        <hr>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                newDish: null,
+                dishList: ['котлети', 'рисик', 'оливки'],
+                cookingList: ['чай', 'водка'],
+                doneList: ['Борщ', 'Плов']
+
+            },
+            methods: {
+                addNewDish() {
+                    this.dishList.push(this.newDish)
+                },
+                cooking(index) {
+                    this.cookingList.push(this.dishList[index])
+                    this.dishList.splice(index, 1)
+                },
+                ready(index) {
+                    this.doneList.push(this.dishList[index])
+                    this.cookingList.splice(index, 1)
+                },
+                done(index) {
+               
+                    this.doneList.splice(index, 1)
+                }
+            }
+
+        })
+    </script>
+
+
+
+</body>
+
+</html>

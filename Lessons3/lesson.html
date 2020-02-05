@@ -7,41 +7,141 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-</head>
+       <style>
+        .valid {
+            color: green;
+        }
+
+        .inValid {
+            color: red;
+        }
+    </style>
+</head> 
+  
 
 <body>
-    <div id="app">
-        <div>Сума на рахунку:{{total}}</div>
-        <div>
-            <label for="addMoneyId">Зарахувати на рахунок</label>
+        <div id="app">
+              
+        <!-- Варіант 1  З класами -->
+              <div :class="totalClass">
+                    Сума на рахунку: {{total}} грн.
+                  </div>
+              
+        <!-- Варіант 2 Зі стилями -->
+              <div :style="[totalStyle]">
+                    Сума на рахунку: {{total}} грн.
+                  </div>
+              <div :class="totalStyle">
+                    Сума на рахунку: {{total}} грн.
+                  </div>
+              <div>
+                    <label for="addMoneyId">
+                          Зарахувати на рахунок:
+                        </label>
+                    <input           v-model="addMoney"           type="number"           id="addMoneyId"
+                          placeholder="Задайте суму"          />
+                    <button @click="addMoneyAction" :disabled="!isAddMoneyValid">
+                          Зарахувати
+                        </button>
+                  </div>
+              <div>
+                    <label>
+                          Зняти з рахунку:
+                          <input v-model="withdrawMoney" type="number" id="addMoneyId"  />
+                        </label>
+                    <button :disabled="!isWithdrawMoneyValid" @click="withdrawMoneyAction">
+                          Зняти
+                        </button>
+                  </div>
 
-        <input type="">
-        </div>
-        <div></div>
-        <div></div>
-        <div></div>
+              <div v-if="percents>0">
+                    Відсотки за обслуговування: {{percents}} грн.
+                  </div>
+              <div v-else>
+                    Задайте суму для виконання операції
+                  </div>
 
-
-
-
-    </div>
+              
+        <hr  />
+              <div>
+                    Сума у доларах: $
+                    <span :style="{color:dollarColor}">{{dollars}}</span>
+                    <br  />
+                    Сума у євро:
+                    <span :class="{inValid:isEuroLess100, valid:!isEuroLess100}"           >$ {{euro}}</span         >
+                    <br  />
+                  </div>
+            </div>
+        
     <script>
         var app = new Vue({
-            el: '#app',
+            el: "#app",
             data: {
+                total: 0,
+                addMoney: null,
+                withdrawMoney: 0,
+                totalClass: "",
+                totalStyle: "",
+                redTotalStyle: {
+                    color: "red"
+                },
+                blueTotalStyle: {
+                    color: "blue"
+                }
+            },
+            computed: {
+                dollarColor() {
+                    return this.dollars < 100 ? "red" : "green";
+                },
+                percents() {
+                    // let s = 0;
+                    // if (this.addMoney !== null) s += this.addMoney * 0.003;
+                    // if (this.withdrawMoney !== null) s += this.withdrawMoney * 0.003;
+                    // return s;
+                    return (this.addMoney || 0 + this.withdrawMoney || 0) * 0.03;
+                },
+                dollars() {
+                    return (this.total / 24).toFixed(2);
+                },
+                euro() {
+                    return (this.total / 27).toFixed(2);
+                },
+                isAddMoneyValid() {
+                    return this.addMoney > 0;
+                },
 
-
-
-
-
-
-
+                isWithdrawMoneyValid() {
+                    return (
+                        this.withdrawMoney > 0 &&
+                        parseFloat(this.withdrawMoney) + this.percents < this.total
+                    );
+                },
+                isEuroLess100() {
+                    return this.euro < 100;
+                }
+            },
+            watch: {
+                total(newValue, oldValue) {
+                    //----- Варіант 1   З класами
+                    if (oldValue < newValue) this.totalClass = "valid";
+                    else this.totalClass = "inValid";
+                    //----- Варіант 2   З стилями
+                    if (oldValue < newValue) this.totalStyle = this.blueTotalStyle;
+                    else this.totalStyle = this.redTotalStyle;
+                }
+            },
+            methods: {
+                addMoneyAction() {
+                    this.total += parseFloat(this.addMoney);
+                    this.addMoney = null;
+                },
+                withdrawMoneyAction() {
+                    this.total -= parseFloat(this.withdrawMoney) + this.percents;
+                    this.withdrawMoney = null;
+                }
             }
-        })
-
-
-
+        });
     </script>
-</body>
+      </body>
 
 </html>
