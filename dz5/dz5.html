@@ -17,12 +17,18 @@
 <body>
     <div id="app">
 
-        <label>Ім'я:<input v-model="newName" type="text" /></label>
-        <label>Кімната:
-            <select v-model="roomNumbIndex">
-                <option v-for="(room, index) in rooms" :key='index'>{{ room }} </option>
-            </select></label>
-        <button @click="addStudentToRoom">Додати</button>
+        <div v-if="rooms.length">
+            <label>Ім'я:<input v-model="newName" type="text" /></label>
+            <label>Кімната:
+                <select v-model="roomNumb">
+                    <option v-for="(room, index) in rooms" :key='index'>{{ room }} </option>
+                </select>
+            </label>
+            <button @click="addStudentToRoom">Додати</button>
+        </div>
+        <div v-else>
+            Немає вільних кімнат
+          </div>
         <hr>
         <div>
             Пошук
@@ -70,7 +76,7 @@
             el: '#app',
             data: {
                 newName: null,
-                roomNumbIndex: null,
+                roomNumb: null,
                 rooms: ['10a', '10b', '11a', '11b', '12a', '12b'],
                 roomersArr: [
                     {
@@ -122,18 +128,18 @@
 
             methods: {
                 addStudentToRoom() {
-                    if (this.newName && this.roomNumbIndex) {
+                    if (this.newName && this.roomNumb) {
                         this.roomersArr.push(
                             {
                                 student: this.newName,
-                                room: this.roomNumbIndex
+                                room: this.roomNumb
                             }
                         )
-                        this.rooms.splice(this.rooms.indexOf(this.roomNumbIndex), 1);
-                        this.roomNumbIndex = null
+                        this.rooms.splice(this.rooms.indexOf(this.roomNumb), 1);
+                        this.roomNumb = null
                     }
                     else
-                        alert("Задайте ім'я, або немає вільних кімнат")
+                        alert("Задайте ім'я, або оберіть вільну кімнату")
                 }
             }
         })
