@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>Document</title>
+    <style>
+        table,
+        table div {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
 <body>
@@ -43,7 +49,7 @@
                 </td>
             </tr>
 
-             <tr v-if='(!searchName && searchRoom)||(!searchName&&!searchRoom)'>
+            <tr v-if='(!searchName && searchRoom)||(!searchName&&!searchRoom)'>
                 <td>
                     <div v-for="item in getFilteredRoom" :key="index">
                         {{ item.student }}
